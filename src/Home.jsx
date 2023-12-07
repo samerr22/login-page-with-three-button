@@ -1,44 +1,140 @@
-import React from "react";
-import git from "/image/github.png";
+import  { useState } from "react";
 import Sea from "/image/search.png";
-import Se from "/image/twitter.png";
+import {Link} from 'react-router-dom';
+
 
 
 function ghome() {
-  return (
-    <div className=" lg:items-center flex flex-col  ">
-      <h1 className=" absolute mt-[100px] ml-[30px] font-semibold text-3xl ">Sing in to your account</h1>
-      <p className="absolute mt-[150px] ml-[30px] font-normal text-sm text-gray-500 lg:ml-[-90px]">Don't have an account?</p>
-      <p className="absolute mt-[150px] ml-[180px] text-blue-600 font-normal text-sm cursor-pointer hover:underline ">Create free account</p>
-      <div className=" absolute flex gap-4 mt-[200px] ml-[30px]">
-        <button className="w-[140px] h-[55px] border-2 rounded-xl hover:bg-gray-100"><img className="  w-[30px] ml-[50px]" src={Sea}/></button>
-        <button className="w-[140px] h-[55px] border-2 rounded-xl hover:bg-gray-100"><img className="  w-[30px] ml-[50px]" src={Se}/></button>
-        <button className="w-[140px] h-[55px] border-2 rounded-xl hover:bg-gray-100"><img className="  w-[30px] ml-[50px]"src={git}/></button>
-        </div>
-        <hr className="absolute w-[160px] mt-[290px] ml-[30px] lg:ml-[-250px]" />
-        <p className="absolute mt-[279px] ml-[200px] text-gray-400 text-sm lg:ml-[30px]">Or continue with</p>
-        <hr className="absolute w-[160px] mt-[290px] ml-[316px]" />
 
-        <label htmlFor="" className="absolute mt-[330px] ml-[30px] text-lg text-semibold text-gray-700 lg:ml-[-300px]"> Email address</label>
-        <input className=" absolute w-[450px] h-[45px] border-2  mt-[370px] ml-[30px] rounded-lg focus:outline-blue-200 " type="text" placeholder=" Enter email to get started" />
-        <label htmlFor="" className="absolute mt-[430px] ml-[30px] text-lg text-semibold text-gray-700 lg:ml-[-330px]"> Password</label>
-        <input className=" absolute w-[450px] h-[45px] border-2  mt-[470px] ml-[30px] rounded-lg focus:outline-blue-200 " type="text" placeholder=" Enter your password" />
-        <button className="absolute w-[450px] h-[50px] mt-[535px] ml-[30px] bg-blue-500 rounded-xl font-semibold text-lg text-white hover:bg-blue-600" >Sing in</button>
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.id]: e.target.value});
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+   try {
+
+    setLoading(true)
+    setError(false);
+    const res = await fetch ('/api/auth/signup', {
+    method: 'POST',
+    headers: {
+        'Content-type' : 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+  const data = await res.json();
+  setLoading(false);
+  if(data.success === false){
+    setError(true);
+    return;
+  }
+  
     
+   } catch (error) {
+    setLoading(false);
+    setError(true);
+    
+   }
+    
+   
+
+  }
+
+  
 
 
 
+ 
 
 
 
+  return (
+    <div className="  absolute h-[120%] w-screen bg-slate-300 ">
+      <h1 className="absoulte text-center my-8 text-4xl font-semibold  ">
+        Specify
+      </h1>
+      <img />
 
+      <div className=" absolute bg-slate-50 h-[650px] w-[450px]  ml-[40px]  rounded-xl shadow-md">
+       
+          <h1 className="absolute ml-[180px] text-xl">Sing up</h1>
+          <p className="absolute text-sm text-gray-500  w-[350px] ml-[40px] mt-[30px] ">
+            crate your Specify account with your work email to sync
+          </p>
+          <p className="absolute text-sm text-gray-500  w-[350px] ml-[65px] mt-[50px] ">
+            all your design data across your design system
+          </p>
 
+          <button className="absolute w-[400px] h-[45px]  rounded-lg border-2 mt-[90px] ml-[20px] hover:bg-slate-100">
+            <img className="absolute w-[18px] ml-[95px] mt-[3px]" src={Sea} />
+            Coutinue with Google
+          </button>
+          <hr className="absolute w-[170px] bg-black mt-[170px] ml-[20px]" />
+          <p className="absolute text-slate-400 uppercase mt-[160px] ml-[205px] text-[14px]">
+            or
+          </p>
+          <hr className="absolute w-[170px] bg-black mt-[170px] ml-[240px]" />
+          <form  onSubmit={handleSubmit}>
+          <label className="absolute text-slate-600 font-semibold mt-[190px] ml-[20px]">
+            UserName
+          </label>
+          <input
+            className="absolute w-[400px] h-[45px] ml-[20px] mt-[220px] border-2 rounded-lg hover:bg-slate-100 focus:outline-none"
+            type="text"
+            placeholder=" UserName"
+            id="username"
+            onChange={handleChange}
+          />
+          <label className="absolute text-slate-600 font-semibold mt-[280px] ml-[20px]">
+            Email
+          </label>
+          <input
+            className="absolute w-[400px] h-[45px] ml-[20px] mt-[310px] border-2 rounded-lg hover:bg-slate-100 focus:outline-none"
+            type="email"
+            placeholder=" Enter Your Email"
+            id="email"
+            onChange={handleChange}
+          />
+          <label className="absolute text-slate-600 font-semibold mt-[370px] ml-[20px]">
+            Password
+          </label>
+          <input
+            className="absolute w-[400px] h-[45px] ml-[20px] mt-[400px] border-2 rounded-lg hover:bg-slate-100 focus:outline-none"
+            type="password"
+            placeholder=" Enter your password"
+            id="password"
+            onChange={handleChange}
+          />
+      
+          <button disabled={loading} className="absolute w-[400px] h-[45px] mt-[480px] ml-[20px] bg-blue-500 rounded-lg text-white uppercase hover:opacity-95 disabled:opacity-80">
+            {loading ? 'SignUp...' : 'Sign Up'}
+          </button>
+      
+        </form>
 
-
-
-
-</div>
+        <p className="absolute font-semibold ml-[20px] mt-[550px] text-sm text-slate-700">
+          By continuing, you're agreeing to our
+        </p>
+        <p className="absolute font-semibold ml-[260px] mt-[550px] text-blue-500 text-sm cursor-pointer hover:underline">
+          Terms and Privacy policy.
+        </p>
+      </div>
+      <p className="absolute font-semibold ml-[150px] mt-[600px] text-sm text-slate-700">
+        Already have an account
+      </p>
+     
+      <p className="absolute font-semibold ml-[310px] mt-[600px] text-sm text-blue-500 cursor-pointer hover:underline">
+        Log in
+      </p>
+      <p className="text-red-500 mt-[530px] absolute ml-[160px] font-semibold"> { error && 'Something went worong!'}</p>
+    
+    </div>
   );
 }
 export default ghome;
+
